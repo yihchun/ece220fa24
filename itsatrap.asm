@@ -1,0 +1,32 @@
+.ORIG x3000
+
+; make TRAP x10
+;  take R1xR2 -> R0
+
+; set up
+LEA R0, TRAP_MUL
+STI R0, NEW_TRAP
+
+
+LD R1, TEST_R1
+LD R2, TEST_R2
+TRAP x10
+HALT
+
+TEST_R1 .FILL #10
+TEST_R2 .FILL #15
+NEW_TRAP .FILL x10
+
+; implementation of multiply
+TRAP_MUL
+  AND R0, R0, #0
+  ST R2, TRAP_MUL_R2_SAVE
+LOOPTOP
+  ADD R0, R0, R1
+  ADD R2, R2, #-1
+  BRnp LOOPTOP
+  LD R2, TRAP_MUL_R2_SAVE
+  RET
+
+TRAP_MUL_R2_SAVE .FILL #0
+.END
