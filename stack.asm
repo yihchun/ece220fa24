@@ -21,10 +21,10 @@ TOPINLOOP
 	LDR R0, R6, #0	; peek at the top of the stack
 	NOT R0, R0
 	ADD R0, R0, #1
-	LDR R3, R2, #0
+	LDR R3, R2, #0	; next outstream character
 	BRz NOMOREINPUT ; (no more output)
 	ADD R0, R0, R3	; compares the peek with the next output element
-	BRnp EXITINLOOP
+	BRnp EXITINLOOP	; top of stack doesn't match the next output, leave loop
 	JSR POP		; same so we pop
 	; the other way to handle running off the end of the stack,
 	; rather than the R6 <= BOT_OF_STACK_MEMORY check, is to check
