@@ -1,0 +1,23 @@
+
+.ORIG x3000
+
+LD R6, STACK_BOTTOM
+
+; push parameters onto the stack (caller setup)
+LD R0, PARAM1
+ADD R6, R6, #-1
+STR R0, R6, #0
+LD R0, PARAM2
+ADD R6, R6, #-1
+STR R0, R6, #0
+
+JSR DO_SUM
+
+
+
+PARAM1 .FILL #3
+PARAM2 .FILL #5
+
+STACK_BOTTOM .FILL x4000
+
+.END
