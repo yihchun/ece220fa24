@@ -85,8 +85,12 @@ int binsearch_r(int *a, int v, int sz) {
  * nth fibonacci number is the n-1st fibonacci number + n-2nd fibonacci number
  */
 int fib(unsigned int n) {
+  static int ct;
+  int tmp;
+  ct++;
   if (n <= 1) return n;
-  return fib(n-1)+fib(n-2);
+  tmp = fib(n-1);
+  return tmp + fib(n-2);
 }
 
 /* quicksort -- sorts an array a of size sz in increasing order
@@ -105,6 +109,10 @@ void quicksort(int *a, int sz) {
   if (sz <= 1)
     return;
 
+#ifdef DEBUG
+  printf("Sort  Called  : ");
+  print_array(a,sz);
+#endif
   pivot = a[0];
   left = 1;
   right = sz-1;
@@ -123,22 +131,40 @@ void quicksort(int *a, int sz) {
     a[left] = a[right];
     a[right] = tmp;
   }
-  /* assert(a[left] > pivot)
+  /* was: assert(a[left] > pivot)
    * can fail if all of the elements are less than the pivot
    * and the first time through the outer while,
    * the for loop went to the very end and became equal to right
    */
   if (a[left] < pivot) {
+    assert(left == sz-1);
+    /* 1. swap the pivot into a[right] */
+    a[0] = a[right];
+    a[right] = pivot;
+    
+    /* 2. recursive call */
+    quicksort(a, sz-1);
+    return;
+    /*
     print_array(a, sz);
     printf("%d %d\n", left, right);
     assert(0);
+    */
   }
 
   a[0] = a[left-1];
   a[left-1] = pivot;
+#ifdef DEBUG
+  printf("Pivot Finished: ");
+  print_array(a,sz);
+#endif
 
   quicksort(a, left-1);
-  quicksort(a+left, sz-left-1);
+  quicksort(a+left, sz-left);
+#ifdef DEBUG
+  printf("Sort  Finished: ");
+  print_array(a,sz);
+#endif
 }
 
 /* insertion sort: iterate through the array sz times
