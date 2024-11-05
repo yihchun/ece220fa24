@@ -7,12 +7,10 @@ struct llnode_t {
   llnode *next;
 };
 
-/*
 int lllength_r(const llnode *head) {
   if (!head) return 0;
   return 1+llength_r(head->next);
 }
-*/
 
 int lllength(const llnode *head) {
   int ret = 0;
@@ -36,6 +34,7 @@ void llinsert_head(llnode **head, int val) {
 
 void llinsert_sorted(llnode **cur, int val) {
   llnode *tmp = malloc(sizeof(llnode));
+
   for (; *cur; cur = &((*cur)->next))
     if ((*cur)->val > val)
       break;
@@ -85,8 +84,8 @@ int main() {
   llinsert_sorted(&head, 8);
   llinsert_sorted(&head, 4);
   llinsert_sorted(&head, 1);
-  llremove_first(&head, 4);
-  llremove_first(&head, 10);
+  //llremove_first(&head, 4);
+  //llremove_first(&head, 10);
   llprint(head);
   return 0;
 }
