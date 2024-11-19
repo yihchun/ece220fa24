@@ -60,12 +60,12 @@ public:
     return *this;
   }
   
-  void show() const {
+  void show(std::ostream &os = std::cout) const {
      LLNode<T> *walk;
      for (walk = head; walk; walk = walk->next) {
-       std::cout << walk->data << " ";
+       os << walk->data << " ";
      }
-     std::cout << std::endl;
+     os << std::endl;
   }
 
   
@@ -78,9 +78,9 @@ public:
     int operator==(const LLIterator &src) const { return ptr == src.ptr; }
     int operator!=(const LLIterator &src) const { return ptr != src.ptr; }
     LLIterator operator++() { ptr = ptr->next; return *this; } // preincrement
-    LLIterator operator++(int) { } //postincr
-    T &operator*() { } // as lvalue
-    T operator*() const { } // as rvalue
+    LLIterator operator++(int) { LLIterator tmp(*this); ptr = ptr->next; return tmp; } //postincr
+    T &operator*() { return ptr->data; } // as lvalue
+    T operator*() const { return ptr->data; } // as rvalue
   private:
     LLNode<T> *ptr;
   };
@@ -98,16 +98,11 @@ private:
   LLNode<T> *head;
 };
 
-/*
-  template <class T>
+template <class T>
 std::ostream& operator<<(std::ostream & stream, const LList<T> & list) {
-  LLNode<T> *walk;
-  for (walk = list.head; walk; walk = walk->next) {
-    stream << walk->data << " ";
-  }
+  list.show(stream);
   return stream;
 }
-*/
 
 void foo() {
   LList<int> x;
@@ -117,15 +112,15 @@ void foo() {
   x.add(3);
   y.add(9);
   y=x;
-  for (auto it=x.begin(); it != x.end(); it++)
+  std::cout << y;
+  /*
+  for (LList<int>::LLIterator it=x.begin(); it != x.end(); it++)
     std::cout << *it << " ";
-  y.show();
+  */
 }
 
 int main() {
-  while (1) {
-    foo();
-  }
+  foo();
   return 0;
 }
   
